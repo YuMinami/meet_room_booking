@@ -1,8 +1,9 @@
-import {login, registerCaptcha} from "./interfaces";
+import {register, registerCaptcha} from "../../interface/interfaces";
 import {Button, Form, Input, message, Space} from "antd";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useForm} from "antd/es/form/Form";
 import './register.css'
+import {useCallback} from "react";
 
 export interface RegisterUser {
     username: string;
@@ -26,31 +27,36 @@ const layout2 = {
 export function Register() {
     const [form] = useForm();
     const navigate = useNavigate();
-    const onFinish = async (values: RegisterUser) => {
-        const res = await login(values.username, values.password);
-        const {code, message: msg, data} = res.data;
+    const onFinish = useCallback(async (values: RegisterUser) => {
+        if (values.password !== values.confirmPassword) {
+            return message.error('两次密码不一致');
+        }
+        const res = await register(values);
 
         if (res.status === 200 || res.status === 201) {
-            message.success("登录成功");
-            console.log(res.data);
-            localStorage.setItem('access_token', data.accessToken);
-            localStorage.setItem('refresh_token', data.refreshToken);
-            localStorage.setItem('user_info', JSON.stringify(data.userInfo));
-
+            message.success('注册成功');
             setTimeout(() => {
-                navigate('/');
-            }, 1000);
+                navigate('/login');
+            }, 1500)
         } else {
-            message.error(data || '系统繁忙，请稍后再试');
+            message.error(res.data.data || '系统繁忙，请稍后再试');
         }
-    }
+    }, []);
 
-    async function sendCaptcha() {
+    const sendCaptcha = useCallback(async function sendCaptcha() {
         const address = form.getFieldValue('email');
-
+        if (!address) {
+            message.error('请输入邮箱地址');
+        }
         const res = await registerCaptcha(address);
         console.log(res);
-    }
+        if (res.status === 201 || res.status === 200) {
+            message.success(res.data.data);
+        } else {
+            message.error('系统繁忙，请稍后再试');
+        }
+    }, []);
+
 
     return <div id="register-container">
         <h1>会议室预定系统</h1>
@@ -83,7 +89,7 @@ export function Register() {
             </div>
             <Form.Item {...layout2}>
                 <div className="links">
-                    已有账号?去<a href="">登录</a>
+                    已有账号?去<Link to='/login'>登录</Link>
                 </div>
             </Form.Item>
 

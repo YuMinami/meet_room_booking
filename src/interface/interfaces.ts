@@ -1,9 +1,9 @@
 import axios from "axios";
-import {RegisterUser} from "./Register";
+import {RegisterUser} from "../pages/register/Register";
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3001/',
-    timeout: 3000
+    baseURL: 'http://localhost:3002/',
+    timeout: 10000
 })
 
 axiosInstance.interceptors.response.use(
@@ -23,9 +23,9 @@ export async function login(username: string, password: string) {
 }
 
 export async function registerCaptcha( email: string) {
-    return await axiosInstance.get("/user/register-capcha",{
+    return await axiosInstance.get("/user/register-captcha",{
         params:{
-            email
+            address: email
         }
     });
 }
