@@ -11,35 +11,19 @@ import {ModifyMenu} from "./pages/modify_menu/ModifyMenu";
 import {InfoModify} from "./pages/info_modify/InfoModify";
 import {PasswordModify} from "./pages/password_modify/PasswordModify";
 import {UserManage} from "./pages/user_manage/UserManage";
+import {Index} from "./pages/index";
+import {UpdateInfo} from "./pages/update_info/UpdateInfo";
 
 
 const routes = [{
     path: "/",
-    element: <div>index</div>,
+    element: <Index></Index>,
     errorElement: <ErrorPage/>,
     children: [
         {
-            path: "/",
-            element: <Menu></Menu>,
-            children: [
-                {
-                    path: 'user_manage',
-                    element: <UserManage/>
-                }
-            ]
-        }, {
-            path: "/user",
-            element: <ModifyMenu></ModifyMenu>,
-            children: [
-                {
-                    path: 'info_modify',
-                    element: <InfoModify/>
-                }, {
-                    path: 'password_modify',
-                    element: <PasswordModify/>
-                },
-            ]
-        },
+            path: "update_info",
+            element: <UpdateInfo/>,
+        }
     ]
 }, {
     path: "login",
