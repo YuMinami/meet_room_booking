@@ -1,8 +1,9 @@
 import {useForm} from "antd/es/form/Form";
 import {useNavigate} from "react-router-dom";
 import {useCallback} from "react";
-import {Button, Form, Input, message} from "antd";
+import {Button, Form, Input, message, Space} from "antd";
 import {updatePassword, updatePasswordCaptcha} from "../../interface/interfaces";
+import './update_password.css'
 
 export interface UpdatePassword {
     username: string;
@@ -86,6 +87,7 @@ export function UpdatePassword() {
             </Form.Item>
 
             <div className='captcha-wrapper'>
+                <Space direction="horizontal" align="baseline">
                 <Form.Item
                     label="验证码"
                     name="captcha"
@@ -94,6 +96,7 @@ export function UpdatePassword() {
                     <Input/>
                 </Form.Item>
                 <Button type="primary" onClick={sendCaptcha}>发送验证码</Button>
+                </Space>
             </div>
 
             <Form.Item

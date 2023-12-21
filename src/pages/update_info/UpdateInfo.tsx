@@ -4,6 +4,7 @@ import {useCallback, useEffect} from "react";
 import {Button, Form, Input, message, Space} from "antd";
 import './update_info.css'
 import {getUserInfo, updateInfo, updateUserInfoCaptcha} from "../../interface/interfaces";
+import {HeadPicUpload} from "./HeadPicUpload";
 
 export interface UserInfo {
     headPic: string;
@@ -50,7 +51,9 @@ export function UpdateInfo() {
             const res = await getUserInfo();
             if(res && (res.status === 200 || res.status === 201)) {
                 const {data} = res.data;
-                console.log(data);
+                form.setFieldValue('headPic', data.headPic);
+                form.setFieldValue('nickName', data.nickName);
+                form.setFieldValue('email', data.email);
             }
         }
         query();
@@ -71,8 +74,9 @@ export function UpdateInfo() {
                 rules={[
                     {required: true, message: '请输入头像!'},
                 ]}
+                shouldUpdate
             >
-                <Input/>
+                <HeadPicUpload></HeadPicUpload>
             </Form.Item>
 
             <Form.Item
